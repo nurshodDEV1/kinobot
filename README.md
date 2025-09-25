@@ -12,6 +12,8 @@ Bu Telegram bot kino kodlari orqali kinolarni tarqatish uchun mo'ljallangan.
 
 ## 🚀 O'rnatish
 
+### Lokal o'rnatish:
+
 1. **Repozitoriyani klonlash:**
 ```bash
 git clone <repository-url>
@@ -23,34 +25,45 @@ cd kino-bot
 pip install -r requirements.txt
 ```
 
-3. **Bot sozlamalari:**
-- `config.py` faylida `BOT_TOKEN` ni o'zgartiring
-- Kanallar ro'yxatini to'ldiring
-- Admin ID ni belgilang
+3. **Environment variables sozlash:**
+- `.env` faylida `BOT_TOKEN` va `ADMIN_ID` ni o'zgartiring
 
 4. **Botni ishga tushirish:**
 ```bash
 python bot.py
 ```
 
+### Railway.ga deploy qilish:
+
+1. **Railway.app saytiga kiring**
+2. **Yangi project yarating**
+3. **GitHub repositoriyani ulang**
+4. **Environment variables larni Railway sozlamalarida qo'shing:**
+   - `BOT_TOKEN` - @BotFather dan olingan token
+   - `ADMIN_ID` - Admin user ID
+   - `CHANNELS` - Kanallar ro'yxati JSON formatida
+
+5. **Deploy avtomatik boshlanadi**
+
 ## ⚙️ Sozlash
 
 ### Bot Token olish:
 1. @BotFather ga murojaat qiling
 2. `/newbot` komandasi bilan yangi bot yarating
-3. Token ni `config.py` ga qo'ying
+3. Token ni `.env` fayliga qo'ying
+
+### Environment Variables:
+```env
+BOT_TOKEN=your_bot_token_here
+ADMIN_ID=your_admin_id_here
+CHANNELS=[{"username": "@your_channel", "title": "Kanal Nomi"}]
+```
 
 ### Kanallar qo'shish:
-`config.py` faylida `CHANNELS` ro'yxatiga kanallaringizni qo'shing:
+`CHANNELS` environment variable da kanallaringizni JSON formatida qo'shing:
 
-```python
-CHANNELS = [
-    {
-        "username": "@your_channel",
-        "title": "Kanal Nomi",
-        "id": -1001234567890
-    }
-]
+```json
+[{"username": "@your_channel", "title": "Kanal Nomi"}]
 ```
 
 ### Kino qo'shish:
@@ -58,7 +71,7 @@ CHANNELS = [
 
 ```json
 {
-    "KINO001": {
+    "001": {
         "file_id": "BAACAgIAAxkDAAI...",
         "title": "Film nomi"
     }
@@ -70,11 +83,11 @@ CHANNELS = [
 ### Oddiy foydalanuvchi:
 1. Botni ishga tushiring
 2. Barcha kanallarga a'zo bo'ling
-3. Kino kodini yuboring (masalan: `KINO001`)
+3. Kino kodini yuboring (masalan: `001`)
 
 ### Admin komandalar:
-- `/add_movie KINO001 file_id Film nomi` - Yangi kino qo'shish
-- `/del_movie KINO001` - Kinoni o'chirish
+- `/add_movie 001 file_id Film nomi` - Yangi kino qo'shish
+- `/del_movie 001` - Kinoni o'chirish
 - `/list_movies` - Barcha kinolar
 - `/stats` - Statistika
 
@@ -83,9 +96,11 @@ CHANNELS = [
 ```
 kino-bot/
 ├── bot.py              # Asosiy bot fayli
-├── config.py           # Sozlamalar
+├── .env                # Environment variables
 ├── movies.json         # Kino ma'lumotlari
 ├── requirements.txt    # Python kutubxonalar
+├── railway.json        # Railway konfiguratsiya
+├── nixpacks.Dockerfile # Docker fayl
 ├── README.md          # Dokumentatsiya
 └── admin.py           # Admin funksiyalar (ixtiyoriy)
 ```
