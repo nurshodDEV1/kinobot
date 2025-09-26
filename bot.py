@@ -457,16 +457,23 @@ async def handle_movie_code(message: types.Message):
 
 if __name__ == "__main__":
     import os
+    import sys
     
-    # Environment variablesni tekshirish
-    bot_token = os.getenv('BOT_TOKEN')
-    if not bot_token:
-        print("❌ BOT_TOKEN environment variable not found!")
-        exit(1)
-    
-    # Railway uchun portni tekshirish
-    port = int(os.environ.get('PORT', 8080))
-    
-    print(f"🤖 Bot ishga tushmoqda... Port: {port}")
-    print(f"📡 Bot token: {bot_token[:10]}...")
-    executor.start_polling(dp, skip_updates=True)
+    try:
+        # Environment variablesni tekshirish
+        bot_token = os.getenv('BOT_TOKEN')
+        if not bot_token:
+            print("❌ BOT_TOKEN environment variable not found!")
+            sys.exit(1)
+        
+        # Railway uchun portni tekshirish
+        port = int(os.environ.get('PORT', 8080))
+        
+        print(f"🤖 Bot ishga tushmoqda... Port: {port}")
+        print(f"📡 Bot token: {bot_token[:10]}...")
+        executor.start_polling(dp, skip_updates=True)
+    except KeyboardInterrupt:
+        print("\n🛑 Bot to'xtatildi")
+    except Exception as e:
+        print(f"❌ Bot xatosi: {e}")
+        sys.exit(1)
