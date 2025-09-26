@@ -466,10 +466,7 @@ if __name__ == "__main__":
             print("❌ BOT_TOKEN environment variable not found!")
             sys.exit(1)
         
-        # Railway uchun portni tekshirish
-        port = int(os.environ.get('PORT', 8080))
-        
-        print(f"🤖 Bot ishga tushmoqda... Port: {port}")
+        print(f"🤖 Bot ishga tushmoqda...")
         print(f"📡 Bot token: {bot_token[:10]}...")
         executor.start_polling(dp, skip_updates=True)
     except KeyboardInterrupt:
