@@ -16,11 +16,19 @@ logging.basicConfig(level=logging.INFO)
 
 # Bot token va sozlamalar
 BOT_TOKEN = os.getenv('BOT_TOKEN', '7690677258:AAEmVb9VFEEACKYCIliR9N0KT6EPEIBA_Kc')  # @BotFather dan olingan token
-ADMIN_ID = int(os.getenv('ADMIN_ID', '5082127676'))  # Admin user ID
+try:
+    ADMIN_ID = int(os.getenv('ADMIN_ID', '5082127676'))  # Admin user ID
+except ValueError:
+    print("❌ ADMIN_ID environment variable not valid!")
+    ADMIN_ID = 5082127676  # Default admin ID
 
 # Majburiy kanallar ro'yxati
-CHANNELS_JSON = os.getenv('CHANNELS', '[{"username": "@goal10sec", "title": "Obuna 1"}]')
-CHANNELS = json.loads(CHANNELS_JSON)
+try:
+    CHANNELS_JSON = os.getenv('CHANNELS', '[{"username": "@goal10sec", "title": "Obuna 1"}]')
+    CHANNELS = json.loads(CHANNELS_JSON)
+except json.JSONDecodeError:
+    print("❌ CHANNELS environment variable JSON not valid, using default!")
+    CHANNELS = [{"username": "@goal10sec", "title": "Obuna 1"}]
 
 # Bot va dispatcher yaratish
 bot = Bot(token=BOT_TOKEN)
@@ -200,6 +208,8 @@ async def get_file_id(message: types.Message):
     """
     
     await message.answer(info_text, parse_mode="Markdown")
+
+
 async def debug_command(message: types.Message):
     """Debug uchun - kanal a'zolikni tekshirish"""
     if message.from_user.id != ADMIN_ID:
@@ -220,6 +230,8 @@ async def debug_command(message: types.Message):
             debug_text += f"   Xato: {str(e)}\n"
     
     await message.answer(debug_text, parse_mode="Markdown")
+
+
 async def check_my_status(message: types.Message):
     """Foydalanuvchining a'zolik statusini tekshirish (debug uchun)"""
     user_id = message.from_user.id
@@ -444,5 +456,17 @@ async def handle_movie_code(message: types.Message):
         )
 
 if __name__ == "__main__":
-    print("🤖 Bot ishga tushmoqda...")
+    import os
+    
+    # Environment variablesni tekshirish
+    bot_token = os.getenv('BOT_TOKEN')
+    if not bot_token:
+        print("❌ BOT_TOKEN environment variable not found!")
+        exit(1)
+    
+    # Railway uchun portni tekshirish
+    port = int(os.environ.get('PORT', 8080))
+    
+    print(f"🤖 Bot ishga tushmoqda... Port: {port}")
+    print(f"📡 Bot token: {bot_token[:10]}...")
     executor.start_polling(dp, skip_updates=True)
